@@ -83,7 +83,7 @@ class openPGNs(wx.Dialog):
 		self.Centre()
 
 		try:
-			self.ser = serial.Serial(self.can_device, self.baud_, timeout=0.5)
+			self.ser = serial.Serial('/dev/'+self.can_device, self.baud_, timeout=0.5)
 		except:
 			self.printing.SetValue(_('Error connecting with device ')+self.can_device)
 			apply_b.Disable()

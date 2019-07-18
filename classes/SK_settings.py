@@ -179,11 +179,12 @@ class SK_settings:
 								self.data['pipedProviders'][count]['pipeElements'][0]['options']['subOptions']['baudrate'] = int(serialInst[alias]['bauds'])
 						count = count + 1
 				if not exists:		
-					self.data['pipedProviders'].append({'pipeElements': [{'type': 'providers/simple', 'options': {'logging': False, 'type': 'NMEA0183', 'subOptions': {"validateChecksum": True, "type": "serial", "device": alias, "baudrate": int(serialInst[alias]['bauds'])}}}], 'enabled': True, 'id': alias})
+					self.data['pipedProviders'].append({'pipeElements': [{'type': 'providers/simple', 'options': {'logging': False, 'type': 'NMEA0183', 'subOptions': 
+						{"validateChecksum": True, "type": "serial", "device": '/dev/'+alias, "baudrate": int(serialInst[alias]['bauds'])}}}], 'enabled': True, 'id': alias})
 					write = True
 		count = 0
 		for i in self.data['pipedProviders']:
-			if '/dev/ttyOP_' in i['id'] and i['pipeElements'][0]['options']['subOptions']['type'] == 'serial':
+			if 'ttyOP_' in i['id'] and i['pipeElements'][0]['options']['subOptions']['type'] == 'serial':
 				exists = False
 				for alias in serialInst:
 					if alias == i['id'] and serialInst[alias]['data'] == 'NMEA 0183' and serialInst[alias]['assignment'] == 'Signal K > OpenCPN': 
@@ -206,11 +207,12 @@ class SK_settings:
 								self.data['pipedProviders'][count]['pipeElements'][0]['options']['subOptions']['baudrate'] = int(serialInst[alias]['bauds'])
 						count = count + 1
 				if not exists:		
-					self.data['pipedProviders'].append({'pipeElements': [{'type': 'providers/simple', 'options': {'logging': False, 'type': 'NMEA2000', 'subOptions': {'device': alias, "baudrate": int(serialInst[alias]['bauds']), 'type': 'ngt-1-canboatjs'}}}], 'enabled': True, 'id': alias})
+					self.data['pipedProviders'].append({'pipeElements': [{'type': 'providers/simple', 'options': {'logging': False, 'type': 'NMEA2000', 'subOptions': 
+						{'device': '/dev/'+alias, "baudrate": int(serialInst[alias]['bauds']), 'type': 'ngt-1-canboatjs'}}}], 'enabled': True, 'id': alias})
 					write = True
 		count = 0
 		for i in self.data['pipedProviders']:
-			if '/dev/ttyOP_' in i['id'] and i['pipeElements'][0]['options']['subOptions']['type'] == 'ngt-1-canboatjs':
+			if 'ttyOP_' in i['id'] and i['pipeElements'][0]['options']['subOptions']['type'] == 'ngt-1-canboatjs':
 				exists = False
 				for alias in serialInst:
 					if alias == i['id'] and serialInst[alias]['data'] == 'NMEA 2000' and serialInst[alias]['assignment'] == 'Signal K > OpenCPN': 
@@ -226,8 +228,8 @@ class SK_settings:
 
 	def set_ngt1_device(self,device,speed):
 		write = False
-		if self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['device'] != device:
-			self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['device'] = device
+		if self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['device'] != '/dev/'+device:
+			self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['device'] = '/dev/'+device
 			write = True
 		if self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['baudrate'] != int(speed):
 			self.data['pipedProviders'][self.OPcan]['pipeElements'][0]['options']['subOptions']['baudrate'] = int(speed)

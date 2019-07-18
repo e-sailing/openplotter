@@ -445,7 +445,7 @@ aktiv_N2K = True
 if not SKN2K.PGN_list: aktiv_N2K = False
 
 stop = 0
-if aktiv_N2K or aktiv_NMEA:
+if aktiv_N2K:
 	for iii in range(100):
 		time.sleep(0.05)
 		tick2 = time.time()

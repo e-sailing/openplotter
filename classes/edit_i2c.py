@@ -18,7 +18,7 @@
 import wx
 import re
 
-from .select_key import selectKey
+from classes.select_key import selectKey
 
 class editI2c(wx.Dialog):
 	def __init__(self,name,magn,sk,rate,offset):

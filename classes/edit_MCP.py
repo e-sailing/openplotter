@@ -18,8 +18,8 @@
 import wx
 import re
 
-from .select_key import selectKey
-from .add_value_setting import addvaluesetting
+from classes.select_key import selectKey
+from classes.add_value_setting import addvaluesetting
 
 class editMCP(wx.Dialog):
 	def __init__(self,aktiv,channel,sk,convert,parent):

@@ -16,8 +16,8 @@
 # along with Openplotter. If not, see <http://www.gnu.org/licenses/>.
 
 import wx, ujson, re, requests
-from .conf import Conf
-from .SK_settings import SK_settings
+from classes.conf import Conf
+from classes.SK_settings import SK_settings
 
 class selectKey(wx.Dialog):
 	def __init__(self, oldkey, selectvessels):

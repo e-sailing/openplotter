@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This file is part of Openplotter.
-# Copyright (C) 2015 by sailoog <https://github.com/sailoog/openplotter>
-#
+# Copyright (C) 2019 by sailoog <https://github.com/sailoog/openplotter>
+#                     e-sailing <https://github.com/e-sailing/openplotter>
 # Openplotter is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Openplotter. If not, see <http://www.gnu.org/licenses/>.
+
 import re
 import wx
 
@@ -91,7 +92,7 @@ class addkplex(wx.Dialog):
 		self.ifilter_add_b = wx.Button(panel, label=_('Add'), pos=(425, 125))
 		self.Bind(wx.EVT_BUTTON, self.ifilter_add, self.ifilter_add_b)
 		self.ifilter_sentences = wx.TextCtrl(panel, -1, style=wx.CB_READONLY, size=(395, 32), pos=(20, 165))
-		self.ifilter_sentences.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_INACTIVECAPTION))
+		self.ifilter_sentences.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTION))
 		self.ifilter_del_b = wx.Button(panel, label=_('Delete'), pos=(425, 165))
 		self.Bind(wx.EVT_BUTTON, self.ifilter_del, self.ifilter_del_b)
 
@@ -106,7 +107,7 @@ class addkplex(wx.Dialog):
 		self.ofilter_add_b = wx.Button(panel, label=_('Add'), pos=(425, 125 + a))
 		self.Bind(wx.EVT_BUTTON, self.ofilter_add, self.ofilter_add_b)
 		self.ofilter_sentences = wx.TextCtrl(panel, -1, style=wx.CB_READONLY, size=(395, 32), pos=(20, 165 + a))
-		self.ofilter_sentences.SetBackgroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_INACTIVECAPTION))
+		self.ofilter_sentences.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTION))
 		self.ofilter_del_b = wx.Button(panel, label=_('Delete'), pos=(425, 165 + a))
 		self.Bind(wx.EVT_BUTTON, self.ofilter_del, self.ofilter_del_b)
 
@@ -118,7 +119,8 @@ class addkplex(wx.Dialog):
 		self.otalker.SetValue('**')
 		self.osent.SetValue('***')
 
-		self.optional = wx.CheckBox(panel, label=_('set optional'), pos=(20, 365))
+		self.activ = wx.CheckBox(panel, label=_('activ'), pos=(20, 365))
+		self.optional = wx.CheckBox(panel, label=_('set optional'), pos=(150, 365))
 
 		gpsd_examp_b = wx.Button(panel, label=_('Add GPSD input'), pos=(10, 320))
 		gpsd_examp_b.Bind(wx.EVT_BUTTON, self.gpsd_examp)
@@ -142,7 +144,9 @@ class addkplex(wx.Dialog):
 			self.switch_ser_net(True)
 			self.switch_io_out(False)
 			self.optional.SetValue(True)
+			self.activ.SetValue(True)
 		else:
+			self.activ.SetValue(edit[0])
 			self.kplex_name.SetValue(edit[1])
 			self.kplex_type.SetValue(edit[2])
 			if edit[2] == 'Serial':
@@ -156,20 +160,20 @@ class addkplex(wx.Dialog):
 				self.kplex_address.SetValue(edit[4])
 				self.kplex_netport.SetValue(edit[5])
 			self.on_kplex_io_change(0)
-			if edit[6] != _('none').decode("utf-8"):
-				if edit[6] == _('accept').decode("utf-8"):
+			if edit[6] != _('none'):
+				if edit[6] == _('accept'):
 					self.ifilter_select.SetValue(self.mode_ifilter[1])
-				if edit[6] == _('ignore').decode("utf-8"):
+				if edit[6] == _('ignore'):
 					self.ifilter_select.SetValue(self.mode_ifilter[2])
-				self.ifilter_sentences.SetValue(edit[7])
+				self.ifilter_sentences.SetValue(edit[7].replace(':-all','').replace(':',',').replace('-','').replace('+','') )
 			else:
 				self.ifilter_select.SetValue(self.mode_ifilter[0])
-			if edit[8] != _('none').decode("utf-8"):
-				if edit[8] == _('accept').decode("utf-8"):
+			if edit[8] != _('none'):
+				if edit[8] == _('accept'):
 					self.ofilter_select.SetValue(self.mode_ofilter[1])
-				if edit[8] == _('ignore').decode("utf-8"):
+				if edit[8] == _('ignore'):
 					self.ofilter_select.SetValue(self.mode_ofilter[2])
-				self.ofilter_sentences.SetValue(edit[8])
+				self.ofilter_sentences.SetValue(edit[9].replace(':-all','').replace(':',',').replace('-','').replace('+','') )
 			else:
 				self.ofilter_select.SetValue(self.mode_ofilter[0])
 			if edit[10] == '1':
@@ -183,13 +187,14 @@ class addkplex(wx.Dialog):
 		self.switch_ser_net(False)
 		self.switch_io_out(True)
 		self.switch_io_in(False)
-		self.kplex_address.SetValue('')
-		self.kplex_netport.SetValue('30330')
+		self.kplex_address.SetValue('127.0.0.1')
+		self.kplex_netport.SetValue('55556')
 		self.kplex_name.SetValue('signalk_out')
 		self.ifilter_select.SetValue(self.mode_ifilter[0])
 		self.ifilter_sentences.SetValue(_('nothing'))
-		self.ofilter_select.SetValue(self.mode_ifilter[0])
-		self.ofilter_sentences.SetValue(_('nothing'))
+		self.ofilter_select.SetValue(self.mode_ifilter[2])
+		self.ofilter_sentences.SetValue('*****%signalk_in')
+		self.optional.SetValue(False)
 
 	def SKin_examp(self, e):
 		self.kplex_type.SetValue('TCP')
@@ -204,6 +209,7 @@ class addkplex(wx.Dialog):
 		self.ifilter_sentences.SetValue(_('nothing'))
 		self.ofilter_select.SetValue(self.mode_ifilter[0])
 		self.ofilter_sentences.SetValue(_('nothing'))
+		self.optional.SetValue(True)
 
 	def gpsd_examp(self, e):
 		self.kplex_type.SetValue('TCP')
@@ -428,7 +434,7 @@ class addkplex(wx.Dialog):
 		filter_type = _('none')
 		filtering = _('nothing')
 
-		if self.ifilter_select.GetValue().encode('utf8') == _('Accept only sentences:') and self.ifilter_sentences.GetValue() != _(
+		if self.ifilter_select.GetValue() == _('Accept only sentences:') and self.ifilter_sentences.GetValue() != _(
 				'nothing'):
 			filter_type = 'accept'
 			filtering = ''
@@ -452,7 +458,7 @@ class addkplex(wx.Dialog):
 		ofilter_type = _('none')
 		ofiltering = _('nothing')
 
-		if self.ofilter_select.GetValue().encode('utf8') == _('Accept only sentences:') and self.ofilter_sentences.GetValue() != _(
+		if self.ofilter_select.GetValue() == _('Accept only sentences:') and self.ofilter_sentences.GetValue() != _(
 				'nothing'):
 			ofilter_type = 'accept'
 			ofiltering = ''
@@ -477,8 +483,12 @@ class addkplex(wx.Dialog):
 		if self.optional.GetValue() == 1:
 			optio = '1'
 		
-		self.add_kplex_out = ['None', name, type_conn, in_out, port_address, bauds_port, filter_type, filtering,
+		activ = True
+		activ = self.activ.GetValue() == 1
+		
+		self.add_kplex_out = [activ, name, type_conn, in_out, port_address, bauds_port, filter_type, filtering,
 							  ofilter_type, ofiltering, optio, self.index]
+							  
 		self.result = self.add_kplex_out
 		self.Destroy()
 

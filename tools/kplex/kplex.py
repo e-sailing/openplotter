@@ -39,6 +39,8 @@ class MyFrame(wx.Frame):
 		self.help_bmp = wx.Bitmap(self.op_folder + "/static/icons/help-browser.png", wx.BITMAP_TYPE_ANY)
 		Language(self.conf)
 		wx.Frame.__init__(self, None, title=_('Kplex GUI - NMEA 0183 Multiplexer'), size=(730,444))
+		self.SetBackgroundColour(wx.Colour(230,230,230,255))
+
 		self.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
 		self.icon = wx.Icon(self.op_folder+'/static/icons/kplex.ico', wx.BITMAP_TYPE_ICO)
 		self.SetIcon(self.icon)

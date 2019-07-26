@@ -17,10 +17,10 @@
 import wx, os, sys, subprocess, configparser, webbrowser, time, ujson
 
 op_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../..')
-sys.path.append(op_folder+'/classes')
-from conf import Conf
-from language import Language
-from SK_settings import SK_settings
+sys.path.append(op_folder)
+from classes.conf import Conf
+from classes.language import Language
+from classes.SK_settings import SK_settings
 from nodes_SK_filter import Nodes, TriggerFilterSK, ActionEndFilterSignalk
 
 class MyFrame(wx.Frame):
@@ -40,13 +40,14 @@ class MyFrame(wx.Frame):
 		self.available_source_nr = ['label','type','pgn','src','sentence','talker']
 
 		wx.Frame.__init__(self, None, title=_('SignalK input filter (uses node-red)'), size=(710,460))
+		self.SetBackgroundColour(wx.Colour(230,230,230,255))
 		
 		self.SetFont(wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
 		
 		self.icon = wx.Icon(self.op_folder+'/static/icons/openplotter.ico', wx.BITMAP_TYPE_ICO)
 		self.SetIcon(self.icon)
 
-		self.list_triggers = wx.ListCtrl(self, -1, style=wx.LC_REPORT | wx.SUNKEN_BORDER)
+		self.list_triggers = wx.ListCtrl(self, -1, style=wx.LC_REPORT | wx.SIMPLE_BORDER)
 		self.list_triggers.InsertColumn(0, _('Signal K key'), width=240)
 		self.list_triggers.InsertColumn(1, _('Source Type'), width=120)
 		self.list_triggers.InsertColumn(2, _('Condition'), width=70)

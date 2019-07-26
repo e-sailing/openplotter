@@ -32,6 +32,7 @@ class editMCP(wx.Dialog):
 		wx.Dialog.__init__(self, None, title=title, size=(450, 270))
 
 		panel = wx.Panel(self)
+		panel.SetBackgroundColour(wx.Colour(230,230,230,255))
 
 		titl = wx.StaticText(panel, label=_('Signal K key'))
 		self.SKkey = wx.TextCtrl(panel, style=wx.CB_READONLY)

@@ -38,7 +38,8 @@ class MyFrame(wx.Frame):
 		
 		wx.Frame.__init__(self, None, title=titleadd, size=(650,435))
 		self.Bind(wx.EVT_CLOSE, self.OnClose)
-		panel = wx.Panel(self, wx.ID_ANY)		
+		panel = wx.Panel(self, wx.ID_ANY)
+		panel.SetBackgroundColour(wx.Colour(230,230,230,255))	
 		
 		self.timer = wx.Timer(self)
 		self.Bind(wx.EVT_TIMER, self.timer_act, self.timer)

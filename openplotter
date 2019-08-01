@@ -1023,7 +1023,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 		except:
 			pass
 
-		self.available_share = [_('none')]
+		self.available_share = [_('none'),'auto']
 		unavailable_net = ['wlan9','lo']
 		if self.bridge.GetValue():
 			unavailable_net.append('eth0')
@@ -1058,16 +1058,20 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 					AP = ni.find('* AP\n')
 					GHz = ni.find('Band 2:')
 					if AP > -1:
-						self.available_ap_device.append([mac+' '+type, mac, type, GHz, wlan])
+							self.available_ap_device.append([mac+' '+type, mac, type, GHz, wlan])
 				else:
 					type = 'on board'
 					if 'Raspberry Pi 3 Model B Plus' in self.rpimodel or 'Raspberry Pi 4 Model B R' in self.rpimodel:
 						GHz = 1
 					else:
 						GHz = -1
-					self.available_ap_device.append([mac+' '+type, mac, type, GHz, wlan])
+					do_exist = False
+					for j in self.available_ap_device:
+						if j[1] == mac: do_exist = True
+					if not do_exist:
+						self.available_ap_device.append([mac+' '+type, mac, type, GHz, wlan])
 
-		if 'Raspberry Pi 3 Model B R' in self.rpimodel and len(self.available_ap_device) == 2:
+		if not ('Raspberry Pi 2' in self.rpimodel) and len(self.available_ap_device) == 2:
 			for i in self.available_ap_device:
 				if 'on board' == i[2]:
 					type = 'AP and Station'
@@ -1135,14 +1139,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 				wififile.close()
 			except:
 				bak=''
-
 			found = False
-			if '__ap' in bak:
-				for i in self.available_ap_device:
-					if 'AP and Station' == i[2]:
-						self.ap_device.SetStringSelection(i[0])
-						self.on_ap_device(0)
-						found = True;
 			if 'brcmfmac' in bak:
 				for i in self.available_ap_device:
 					if 'on board' == i[2]:
@@ -1158,6 +1155,19 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 						if i[3]>=1: self.ap_5.Enable()
 						found = True;
 			if not found:
+				try:
+					wififile = open(self.conf_network+'/.openplotter/start1.sh', 'r', 2000)
+					bak2 = wififile.read()
+					wififile.close()
+				except:
+					bak2 = ''
+				if '__ap' in bak2:
+					for i in self.available_ap_device:
+						if 'AP and Station' == i[2]:
+							self.ap_device.SetStringSelection(i[0])
+							self.on_ap_device(0)
+							found = True;
+			if not found:
 				self.ap_device.SetStringSelection(_('none'))
 				self.ap_disable()
 			else:
@@ -1167,7 +1177,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 			
 			i=' '
 			try:
-				wififile = open(self.conf_network+'/../start-ap-managed-wifi.sh', 'r', 2000)
+				wififile = open(self.conf_network+'/.openplotter/start-ap-managed-wifi.sh', 'r', 2000)
 				bak = wififile.read()
 				wififile.close()
 			except:
@@ -1208,8 +1218,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 	
 	def ap_enable(self):
 		self.bridge.Enable()
-		if 'AP and Station' in self.ap_device.GetValue():
-			self.bridge.Disable()
+		#if 'AP and Station' in self.ap_device.GetValue():
+		#	self.bridge.Disable()
 		
 	def ap_enable2(self):
 		self.share.Enable()
@@ -1323,7 +1333,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 				wififile.close()
 			
 			#set start script
-			script_file = self.conf_network+'/.openplotter/Network/start-ap-managed-wifi.sh'
+			script_file = self.conf_network+'/.openplotter/start-ap-managed-wifi.sh'
 			if os.path.isfile(script_file):
 				if self.bak_share!=share:
 					wififile = open(script_file, 'r', 2000)
@@ -1332,7 +1342,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/"""
 
 					wififile = open(script_file, 'w')
 					for line in lines:
-						if 0<=line.find("internet="): line = "internet="+share
+						if 0<=line.find("internet="): line = "internet="+share+"\n"
 						wififile.write(line)
 					wififile.close()
 

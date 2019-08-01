@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Openplotter. If not, see <http://www.gnu.org/licenses/>.
 
-import ujson, uuid, wx, re, time, webbrowser
-from select_key import selectKey
-from datetime import datetime
+import ujson, uuid, wx, re, time, webbrowser, datetime
+from classes.select_key import selectKey
 
 class Nodes:
 	def __init__(self,parent,actions_flow_id):
@@ -358,6 +357,7 @@ class TriggerFilterSK(wx.Dialog):
 		    }'''
 			
 		panel = wx.Panel(self)
+		panel.SetBackgroundColour(wx.Colour(230,230,230,255))
 
 		vessellabel = wx.StaticText(panel, label=_('Vessel'))
 		self.vessel = wx.TextCtrl(panel, size=(290,-1))

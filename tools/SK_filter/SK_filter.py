@@ -179,10 +179,10 @@ class MyFrame(wx.Frame):
 										field3 = local_time.strftime("%Y-%m-%d %H:%M:%S")
 									except: pass
 								else: value2 = node['rules'][0]['v2']
-			self.list_triggers.SetStringItem(self.last,1,property)
-			self.list_triggers.SetStringItem(self.last,2,self.available_conditions[int(condition["operator"])])
-			self.list_triggers.SetStringItem(self.last,3,value)
-			self.list_triggers.SetStringItem(self.last,4,value2)
+			self.list_triggers.SetItem(self.last,1,property)
+			self.list_triggers.SetItem(self.last,2,self.available_conditions[int(condition["operator"])])
+			self.list_triggers.SetItem(self.last,3,value)
+			self.list_triggers.SetItem(self.last,4,value2)
 			self.last = self.list_triggers.GetItemCount()-1
 
 	def on_select_triggers(self, e):

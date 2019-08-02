@@ -180,24 +180,24 @@ def work_pypilot():
 		tick1 = time.time()
 				
 
-		# cleanup
-		print 'stopping pypilot pid:', pid
-		try:
-			os.kill(pid, 15)
-			time.sleep(1) # wait one second to shut down pypilot
-		except Exception, e:
-			print 'exception stopping pypilot', e
+	# cleanup
+	print 'stopping pypilot pid:', pid
+	try:
+		os.kill(pid, 15)
+		time.sleep(1) # wait one second to shut down pypilot
+	except Exception, e:
+		print 'exception stopping pypilot', e
 
-		try:
-			if os.waitpid(pid, os.WNOHANG)[0] == pid:
-				print 'pypilot stopped: ok'
-			else:
-				print 'killing pypilot pid:', pid
-				os.kill(pid, 9) # try to kill with signal 9
-		except:
-			pass # pypilot already exited, or other exception
-				
-		print 'pypilot thread exiting'
+	try:
+		if os.waitpid(pid, os.WNOHANG)[0] == pid:
+			print 'pypilot stopped: ok'
+		else:
+			print 'killing pypilot pid:', pid
+			os.kill(pid, 9) # try to kill with signal 9
+	except:
+		pass # pypilot already exited, or other exception
+			
+	print 'pypilot thread exiting'
 
 
 # read pressure, humidity, temperature and GENERATE SK
